@@ -127,8 +127,6 @@ public class OrdersController : ControllerBase
 
         order.Status = OrderStatus.PendingPayment;
 
-        _context.Update(order);
-
         await _context.SaveChangesAsync();
 
         var paymentUri = GeorgianCardHelper.BuildPaymentUri(payment.Id.ToString(), _config);
