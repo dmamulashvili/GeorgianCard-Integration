@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
 
             var paymentUri = GeorgianCardHelper.BuildPaymentUri(payment.Id.ToString(), _config);
 
-            return Ok(new { paymentRedirectUrl = paymentUri.AbsoluteUri });
+            return Ok(new { RedirectUrl = paymentUri.AbsoluteUri });
         }
     }
 }

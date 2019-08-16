@@ -122,10 +122,6 @@ namespace WebAPI.Controllers
                 payment.ExternalExtendedResultDescription = extendedResultCode.ToString();
             }
 
-            _context.Update(payment);
-
-            _context.Update(order);
-
             await _context.SaveChangesAsync();
 
             return Ok(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Success, ResultCode.Success.ToString()));
