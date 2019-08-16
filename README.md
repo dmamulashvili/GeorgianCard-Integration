@@ -66,7 +66,7 @@ public class GeorgianCardRequest
     public ResultCode ResultCode { get; set; }
 
     [BindProperty(Name = "ext_result_code")]
-    public ExtendedResultCode ExtendedResultCode { get; set; }
+    public string ExtendedResultCode { get; set; }
 
     [BindProperty(Name = "p.authcode")]
     public string AuthCode { get; set; }
