@@ -47,10 +47,15 @@ namespace WebAPI.Controllers
                 return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Payment not found."));
             }
 
-            if (string.IsNullOrWhiteSpace(request.TransactionId) || request.TransactionId != payment.ExternalId)
+            if (string.IsNullOrWhiteSpace(request.TransactionId))
             {
                 return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid trx_id."));
             }
+
+            payment.ExternalId = request.TransactionId;
+
+            _context.Update(payment);
+            await _context.SaveChangesAsync();
 
             var paymentAmount = GeorgianCardHelper.ConvertGELToGeorgianCardAmount(payment.Amount);
 
