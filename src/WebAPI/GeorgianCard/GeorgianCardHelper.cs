@@ -26,7 +26,7 @@ namespace WebAPI.GeorgianCard
             return uriBuilder.Uri;
         }
 
-        public static string BuildPaymentAvailableResponse(ResultCode resultCode, string resultDesc, int paymentAmount = default, GeorgianCardConfiguration config = default)
+        public static string BuildPaymentAvailableResponse(ResultCode resultCode, string resultDesc, int paymentAmount = default, GeorgianCardConfiguration config = default, string shortDesc = default, string longDesc = default)
         {
             switch (resultCode)
             {
@@ -39,6 +39,8 @@ namespace WebAPI.GeorgianCard
                                     new XElement("desc", resultDesc)
                                 ),
                                 new XElement("purchase",
+                                    new XElement("shortDesc", shortDesc ?? "Payment Processing"),
+                                    new XElement("longDesc", longDesc ?? "Payment Processing"),
                                     new XElement("account-amount",
                                         new XElement("id", config.AccountId),
                                         new XElement("amount", paymentAmount),
