@@ -31,29 +31,29 @@ namespace WebAPI.Controllers
         {
             if (string.IsNullOrWhiteSpace(request.MerchantId) || request.MerchantId != _config.MerchantId)
             {
-                return Ok(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid merch_id."));
+                return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid merch_id."));
             }
 
             if (!int.TryParse(request.PaymentId, out int paymentId))
             {
-                return Ok(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid o.id."));
+                return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid o.id."));
             }
 
             var payment = await _context.Payments.FindAsync(paymentId);
 
             if (payment == null)
             {
-                return Ok(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Payment not found."));
+                return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Payment not found."));
             }
 
             if (string.IsNullOrWhiteSpace(request.TransactionId) || request.TransactionId != payment.ExternalId)
             {
-                return Ok(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid trx_id."));
+                return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid trx_id."));
             }
 
             var paymentAmount = GeorgianCardHelper.ConvertGELToGeorgianCardAmount(payment.Amount);
 
-            return Ok(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Success, ResultCode.Success.ToString(), paymentAmount, _config));
+            return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Success, ResultCode.Success.ToString(), paymentAmount, _config));
         }
 
         [HttpGet]
@@ -61,29 +61,29 @@ namespace WebAPI.Controllers
         {
             if (string.IsNullOrWhiteSpace(request.MerchantId) || request.MerchantId != _config.MerchantId)
             {
-                return Ok(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid merch_id."));
+                return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid merch_id."));
             }
 
             if (!int.TryParse(request.PaymentId, out int paymentId))
             {
-                return Ok(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid o.id."));
+                return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid o.id."));
             }
 
             var payment = await _context.Payments.FindAsync(paymentId);
 
             if (payment == null)
             {
-                return Ok(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Payment not found."));
+                return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Payment not found."));
             }
 
             if (string.IsNullOrWhiteSpace(request.TransactionId) || request.TransactionId != payment.ExternalId)
             {
-                return Ok(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid trx_id."));
+                return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid trx_id."));
             }
 
             if (!DateTime.TryParseExact(request.Date, _config.DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime processDate))
             {
-                return Ok(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid ts."));
+                return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid ts."));
             }
 
             payment.ProcessDate = processDate;
@@ -126,7 +126,7 @@ namespace WebAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Success, ResultCode.Success.ToString()));
+            return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Success, ResultCode.Success.ToString()));
         }
     }
 }

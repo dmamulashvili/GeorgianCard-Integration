@@ -26,7 +26,7 @@ namespace WebAPI.GeorgianCard
             return uriBuilder.Uri;
         }
 
-        public static XElement BuildPaymentAvailableResponse(ResultCode resultCode, string resultDesc, int paymentAmount = default, GeorgianCardConfiguration config = default)
+        public static string BuildPaymentAvailableResponse(ResultCode resultCode, string resultDesc, int paymentAmount = default, GeorgianCardConfiguration config = default)
         {
             switch (resultCode)
             {
@@ -47,7 +47,7 @@ namespace WebAPI.GeorgianCard
                                     )
                                 )
                             );
-                        return result;
+                        return result.ToString();
                     }
                 case ResultCode.Fail:
                     {
@@ -58,14 +58,14 @@ namespace WebAPI.GeorgianCard
                                     new XElement("desc", resultDesc)
                                 )
                             );
-                        return result;
+                        return result.ToString();
                     }
                 default:
                     return null;
             }
         }
 
-        public static XElement BuildRegisterPaymentResponse(ResultCode resultCode, string resultDesc)
+        public static string BuildRegisterPaymentResponse(ResultCode resultCode, string resultDesc)
         {
             var result =
                 new XElement("register-payment-response",
@@ -75,7 +75,7 @@ namespace WebAPI.GeorgianCard
                     )
                 );
 
-            return result;
+            return result.ToString();
         }
 
         public static int ConvertGELToGeorgianCardAmount(decimal input)
