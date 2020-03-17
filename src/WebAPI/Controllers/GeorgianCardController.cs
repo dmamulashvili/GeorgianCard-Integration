@@ -27,7 +27,8 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckPaymentAvailability([FromQuery] GeorgianCardRequest request)
+        [Route("payment-available")]
+        public async Task<IActionResult> PaymentAvailable([FromQuery] GeorgianCardRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.MerchantId) || request.MerchantId != _config.MerchantId)
             {
@@ -57,6 +58,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("register-payment")]
         public async Task<IActionResult> RegisterPayment([FromQuery] GeorgianCardRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.MerchantId) || request.MerchantId != _config.MerchantId)
@@ -119,10 +121,6 @@ namespace WebAPI.Controllers
             {
                 payment.ExternalExtendedResultDescription = extendedResultCode.ToString();
             }
-
-            _context.Update(payment);
-
-            _context.Update(order);
 
             await _context.SaveChangesAsync();
 
