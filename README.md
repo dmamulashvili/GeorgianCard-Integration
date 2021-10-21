@@ -5,7 +5,7 @@ Simple GeorgianCard Integration with ASP.NET Core WebAPI (w/o Payment Reversal &
 
 ## Configuration
 1. Configuration model `GeorgianCardConfiguration.cs`:
-```
+```cs
 public class GeorgianCardConfiguration
 {
     public string PaymentUrl { get; set; }
@@ -28,7 +28,7 @@ public class GeorgianCardConfiguration
 }
 ```
 2. Configuration sub-section in `appsettings.json`:
-```
+```json
 "GeorgianCardConfiguration": {
   "PaymentUrl": "",
   "PaymentSuccessUrl": "",
@@ -42,12 +42,12 @@ public class GeorgianCardConfiguration
 }
 ```
 3. Registered configuration in `Startup.cs`'s `ConfigureServices` method:
-```
+```cs
 services.Configure<GeorgianCard.GeorgianCardConfiguration>(Configuration.GetSection(nameof(GeorgianCard.GeorgianCardConfiguration)));
 ```
 ## Integration
 1. HTTP GET Request model `GeorgianCardRequest`:
-```
+```cs
 public class GeorgianCardRequest
 {
     [BindProperty(Name = "merch_id")]
@@ -85,7 +85,7 @@ public class GeorgianCardRequest
 }
 ```
 2. Place Order implementation `OrdersController.cs`:
-```
+```cs
 [Route("api/[controller]")]
 [ApiController]
 public class OrdersController : ControllerBase
@@ -136,7 +136,7 @@ public class OrdersController : ControllerBase
 }
 ```
 3. Payment Available & Register Payment actions Implementation `GeorgianCardController.cs`:
-```
+```cs
 [Route("api/[controller]")]
 [ApiController]
 public class GeorgianCardController : ControllerBase
