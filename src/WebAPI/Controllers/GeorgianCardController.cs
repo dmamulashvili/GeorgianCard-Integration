@@ -47,6 +47,11 @@ namespace WebAPI.Controllers
                 return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Payment not found."));
             }
 
+            if (payment.Status != PaymentStatus.Pending)
+            {
+                return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Payment already handled."));
+            }
+            
             if (string.IsNullOrWhiteSpace(request.TransactionId))
             {
                 return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid trx_id."));
