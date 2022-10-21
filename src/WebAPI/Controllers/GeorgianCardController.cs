@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WebAPI.Data;
@@ -20,7 +17,7 @@ namespace WebAPI.Controllers
 
         public GeorgianCardController(IOptions<GeorgianCardConfiguration> options
             //, ApplicationDbContext context
-            )
+        )
         {
             _config = options.Value;
             //_context = context;
@@ -49,9 +46,10 @@ namespace WebAPI.Controllers
 
             if (payment.Status != PaymentStatus.Pending)
             {
-                return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Payment already handled."));
+                return Content(
+                    GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Payment already handled."));
             }
-            
+
             if (string.IsNullOrWhiteSpace(request.TransactionId))
             {
                 return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Fail, "Invalid trx_id."));
@@ -59,12 +57,12 @@ namespace WebAPI.Controllers
 
             payment.ExternalId = request.TransactionId;
 
-            _context.Update(payment);
             await _context.SaveChangesAsync();
 
             var paymentAmount = GeorgianCardHelper.ConvertGELToGeorgianCardAmount(payment.Amount);
 
-            return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Success, ResultCode.Success.ToString(), paymentAmount, _config));
+            return Content(GeorgianCardHelper.BuildPaymentAvailableResponse(ResultCode.Success,
+                ResultCode.Success.ToString(), paymentAmount, _config));
         }
 
         [HttpGet]
@@ -93,7 +91,8 @@ namespace WebAPI.Controllers
                 return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid trx_id."));
             }
 
-            if (!DateTime.TryParseExact(request.Date, _config.DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime processDate))
+            if (!DateTime.TryParseExact(request.Date, _config.DateTimeFormat, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out DateTime processDate))
             {
                 return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Fail, "Invalid ts."));
             }
@@ -134,7 +133,8 @@ namespace WebAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Content(GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Success, ResultCode.Success.ToString()));
+            return Content(
+                GeorgianCardHelper.BuildRegisterPaymentResponse(ResultCode.Success, ResultCode.Success.ToString()));
         }
     }
 }
